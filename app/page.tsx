@@ -1,10 +1,10 @@
+import HeroSection from '@/components/sections/hero';
 import Header from '@/components/shared/header';
-import Image from 'next/image';
 
 export default function Home() {
     return (
         <div>
-            <Header />
+            <HeroSection />
         </div>
     );
 }
