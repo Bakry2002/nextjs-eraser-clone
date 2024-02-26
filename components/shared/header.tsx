@@ -1,11 +1,21 @@
+'use client';
+
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
-import { buttonVariants } from '../ui/button';
-import { ArrowRight, ExternalLink, Menu } from 'lucide-react';
+import { Button, buttonVariants } from '../ui/button';
+import { ArrowRight, Menu } from 'lucide-react';
+import {
+    LoginLink,
+    LogoutLink,
+    RegisterLink,
+    useKindeBrowserClient,
+} from '@kinde-oss/kinde-auth-nextjs';
 
 const Header = () => {
+    const { user } = useKindeBrowserClient();
+
+    console.log('USER', user);
     return (
         <header className="relative z-10 py-8">
             <div className="mx-auto flex h-16 max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8">
@@ -88,27 +98,36 @@ const Header = () => {
 
                     {/* CTA */}
                     <div className="flex items-center gap-4">
-                        <div className="hidden sm:flex sm:gap-4">
-                            <Link
-                                className={cn(
-                                    'flex items-center justify-center rounded-md px-5 py-2.5 text-sm font-medium text-white transition hover:bg-transparent hover:text-white/75',
-                                )}
-                                href="#"
-                            >
-                                Login
-                            </Link>
+                        {user && (
+                            <Button>
+                                <LogoutLink>Logout</LogoutLink>
+                            </Button>
+                        )}
 
-                            <Link
-                                className={cn(
-                                    'hidden items-center justify-center rounded-md px-5 py-2 text-sm font-medium  transition  sm:flex',
-                                    buttonVariants({ variant: 'secondary' }),
-                                )}
-                                href="#"
-                            >
-                                Try Eraser
-                                <ArrowRight className="ml-1 h-4 w-4" />
-                            </Link>
-                        </div>
+                        {!user && (
+                            <div className="hidden sm:flex sm:gap-4">
+                                <LoginLink
+                                    postLoginRedirectURL="/dashboard"
+                                    className={cn(
+                                        'flex items-center justify-center rounded-md px-5 py-2.5 text-sm font-medium text-white transition hover:bg-transparent hover:text-white/75',
+                                    )}
+                                >
+                                    Login
+                                </LoginLink>
+
+                                <RegisterLink
+                                    className={cn(
+                                        'hidden items-center justify-center rounded-md px-5 py-2 text-sm font-medium  transition  sm:flex',
+                                        buttonVariants({
+                                            variant: 'secondary',
+                                        }),
+                                    )}
+                                >
+                                    Try Eraser
+                                    <ArrowRight className="ml-1 h-4 w-4" />
+                                </RegisterLink>
+                            </div>
+                        )}
 
                         {/* Mobile toggle */}
                         <button className="block rounded p-2.5 text-white transition hover:text-white/75 md:hidden">
