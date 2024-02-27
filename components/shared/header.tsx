@@ -20,7 +20,7 @@ const Header = () => {
 
     const createUser = useMutation(api.user.createUser);
 
-    const { user, isLoading, isAuthenticated }: any = useKindeBrowserClient(); // get current user session
+    const { user, isLoading, isAuthenticated } = useKindeBrowserClient(); // get current user session
 
     useEffect(() => {
         if (user) {
@@ -30,13 +30,13 @@ const Header = () => {
 
     const checkUser = async () => {
         const result = await convex.query(api.user.getUser, {
-            email: user?.email,
+            email: user?.email ?? '',
         });
         if (!result?.length) {
             createUser({
-                name: `${user?.given_name} ${user?.family_name}`,
-                email: user?.email,
-                image: user?.picture,
+                name: `${user?.given_name} ${user?.family_name}` ?? '',
+                email: user?.email ?? '',
+                image: user?.picture ?? '',
             }).then((res) => {
                 console.log(res);
             });
