@@ -11,42 +11,38 @@ import {
     RegisterLink,
     useKindeBrowserClient,
 } from '@kinde-oss/kinde-auth-nextjs';
-import { useMutation, useQuery } from 'convex/react';
+import { useConvex, useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { useEffect } from 'react';
 
 const Header = () => {
-    const { user, isLoading, isAuthenticated } = useKindeBrowserClient(); // get current user session
-
-    // if (!user) {
-    //     return null;
-    // }
-
-    // get user data from database
-    const getUser = useQuery(api.user.getUser, {
-        email: user?.email ?? '',
-    });
+    const convex = useConvex();
 
     const createUser = useMutation(api.user.createUser);
 
-    // useEffect(() => {
-    //     if (user) {
-    //         console.log('USER from DB: ', getUser);
-    //     }
+    const { user, isLoading, isAuthenticated }: any = useKindeBrowserClient(); // get current user session
 
-    //     if (getUser === undefined) {
-    //         createUser({
-    //             name: `${user?.given_name} ${user?.family_name}` ?? '',
-    //             email: user?.email ?? '',
-    //             image: user?.picture ?? '',
-    //         }).then((res) => {
-    //             console.log('USER CREATED: ', res);
-    //         });
-    //     }
-    // }, [user]);
+    useEffect(() => {
+        if (user) {
+            checkUser();
+        }
+    }, [user]);
 
-    // CLG
-    console.log('USER', user);
+    const checkUser = async () => {
+        const result = await convex.query(api.user.getUser, {
+            email: user?.email,
+        });
+        if (!result?.length) {
+            createUser({
+                name: `${user?.given_name} ${user?.family_name}`,
+                email: user?.email,
+                image: user?.picture,
+            }).then((res) => {
+                console.log(res);
+            });
+        }
+    };
+
     return (
         <header className="relative z-10 py-8">
             <div className="mx-auto flex h-16 max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8">
