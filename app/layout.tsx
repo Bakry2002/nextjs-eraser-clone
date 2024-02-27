@@ -4,6 +4,7 @@ import './globals.css';
 import Header from '@/components/shared/header';
 import { cn } from '@/lib/utils';
 import ConvexClientProvider from './ConvexClientProvider';
+import { Toaster } from '@/components/ui/sonner';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,11 +23,13 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={cn('bg-[#0b0b0b]', inter.className)}>
+            <body className={cn('bg-[#171717]', inter.className)}>
                 <ConvexClientProvider>
                     <main>{children}</main>
                 </ConvexClientProvider>
             </body>
+
+            <Toaster />
         </html>
     );
 }
