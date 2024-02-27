@@ -23,6 +23,9 @@ const Header = () => {
     const { user, isLoading, isAuthenticated } = useKindeBrowserClient(); // get current user session
 
     useEffect(() => {
+        if (!isAuthenticated) {
+            return;
+        }
         if (user) {
             checkUser();
         }
@@ -40,6 +43,9 @@ const Header = () => {
             }).then((res) => {
                 console.log(res);
             });
+        } else {
+            console.log('User already exists');
+            return;
         }
     };
 
