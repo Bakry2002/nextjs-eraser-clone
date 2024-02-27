@@ -4,17 +4,48 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button, buttonVariants } from '../ui/button';
-import { ArrowRight, Menu } from 'lucide-react';
+import { ArrowRight, Loader2, Menu } from 'lucide-react';
 import {
     LoginLink,
     LogoutLink,
     RegisterLink,
     useKindeBrowserClient,
 } from '@kinde-oss/kinde-auth-nextjs';
+import { useMutation, useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import { useEffect } from 'react';
 
 const Header = () => {
-    const { user } = useKindeBrowserClient();
+    const { user, isLoading, isAuthenticated } = useKindeBrowserClient(); // get current user session
 
+    // if (!user) {
+    //     return null;
+    // }
+
+    // get user data from database
+    const getUser = useQuery(api.user.getUser, {
+        email: user?.email ?? '',
+    });
+
+    const createUser = useMutation(api.user.createUser);
+
+    // useEffect(() => {
+    //     if (user) {
+    //         console.log('USER from DB: ', getUser);
+    //     }
+
+    //     if (getUser === undefined) {
+    //         createUser({
+    //             name: `${user?.given_name} ${user?.family_name}` ?? '',
+    //             email: user?.email ?? '',
+    //             image: user?.picture ?? '',
+    //         }).then((res) => {
+    //             console.log('USER CREATED: ', res);
+    //         });
+    //     }
+    // }, [user]);
+
+    // CLG
     console.log('USER', user);
     return (
         <header className="relative z-10 py-8">
@@ -98,13 +129,39 @@ const Header = () => {
 
                     {/* CTA */}
                     <div className="flex items-center gap-4">
-                        {user && (
+                        {isLoading && (
+                            <Loader2 className="h-8 w-8 animate-spin" />
+                        )}
+
+                        {user?.picture && (
+                            <Image
+                                src={user?.picture}
+                                alt="Profile picture"
+                                width={50}
+                                height={50}
+                                className="mx-auto my-2 rounded-full"
+                            />
+                        )}
+
+                        {user && !user?.picture && (
+                            <div className="mx-auto my-2 flex h-7 w-7 items-center justify-center rounded-full bg-zinc-800 text-xs">
+                                {user?.given_name?.[0]}
+                            </div>
+                        )}
+
+                        {/* {user?.email && (
+                            <p className="mb-3 text-center text-xs">
+                                Logged in as {user?.email}
+                            </p>
+                        )} */}
+
+                        {!isLoading && isAuthenticated && (
                             <Button>
                                 <LogoutLink>Logout</LogoutLink>
                             </Button>
                         )}
 
-                        {!user && (
+                        {!isLoading && !isAuthenticated && (
                             <div className="hidden sm:flex sm:gap-4">
                                 <LoginLink
                                     postLoginRedirectURL="/dashboard"
