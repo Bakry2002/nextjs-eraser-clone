@@ -25,8 +25,9 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import CTALinks from './cta-links';
+import { FileListContext } from '@/context/file-list-context';
 
 interface TeamProps {
     name: string;
@@ -37,6 +38,7 @@ interface TeamProps {
 const Sidebar = () => {
     const convex = useConvex();
     const router = useRouter();
+    const { setFileList_ } = useContext(FileListContext);
 
     const [teamList, setTeamList] = useState<TeamProps[]>();
     const [isTeamLoading, setIsTeamLoading] = useState(false);
@@ -85,7 +87,7 @@ const Sidebar = () => {
         const result = await convex.query(api.files.getFiles, {
             teamId: activeTeam?._id ?? '',
         });
-
+        setFileList_(result);
         setTotalFiles(result?.length);
     };
 

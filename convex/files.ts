@@ -29,6 +29,7 @@ export const getFiles = query({
         const result = await ctx.db
             .query('files')
             .filter((q) => q.eq(q.field('teamId'), args.teamId))
+            .order('desc')
             .collect();
         // get all files for a team
 
