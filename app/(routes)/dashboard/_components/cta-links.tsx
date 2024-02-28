@@ -2,8 +2,16 @@
 import { Button } from '@/components/ui/button';
 import { CTAMenu } from '@/constant';
 import { cn } from '@/lib/utils';
-import Link from 'next/link';
-import React, { useState } from 'react';
+import { useState } from 'react';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
+import { CreateFileForm } from './craete-file-form';
 
 const CTALinks = () => {
     // extract the first item from the array
@@ -41,18 +49,20 @@ const CTALinks = () => {
                         >
                             <cta.icon className="h-4 w-4" />
                             {cta.name}
+
+                            {cta.isBeta && (
+                                <span className="ml-1 flex items-center justify-center rounded-sm bg-blue-500 px-1 py-0 text-[10px] uppercase leading-4 text-white">
+                                    Beta
+                                </span>
+                            )}
                         </li>
                     ))}
                 </>
             </ul>
 
             {/* Add new file button */}
-            <Button
-                variant="default"
-                className="mt-3 flex justify-start bg-blue-500 px-4 hover:bg-blue-500/75"
-            >
-                New File
-            </Button>
+
+            <NameDialog />
 
             {/* Progress bar => File creation limit */}
             <div className="mt-5 h-4 w-full rounded-full bg-neutral-800">
@@ -73,3 +83,29 @@ const CTALinks = () => {
 };
 
 export default CTALinks;
+
+export const NameDialog = () => {
+    return (
+        <Dialog>
+            <DialogTrigger asChild className="w-full">
+                <Button
+                    variant="default"
+                    className="mt-3 flex justify-start bg-blue-500 px-4 hover:bg-blue-500/75"
+                >
+                    New File
+                </Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle className="">Create New File</DialogTitle>
+                </DialogHeader>
+                <DialogDescription>
+                    <CreateFileForm
+                        className="w-full sm:w-full"
+                        fromDialog={true}
+                    />
+                </DialogDescription>
+            </DialogContent>
+        </Dialog>
+    );
+};

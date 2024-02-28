@@ -26,7 +26,7 @@ const formSchema = z.object({
     name: z.string().min(1, { message: 'Name is required' }),
 });
 
-export const CreateTeamForm = ({
+export const CreateFileForm = ({
     className,
     fromDialog = false,
 }: {
@@ -53,8 +53,9 @@ export const CreateTeamForm = ({
                 createdBy: user?.email ?? '',
             }).then(() => {
                 console.log({ values });
-                toast.success('Team created successfully');
+                toast.success('File created successfully');
                 router.push('/dashboard');
+                router.refresh();
             });
         } catch (error) {
             toast.error('Error creating team!');
@@ -75,14 +76,14 @@ export const CreateTeamForm = ({
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel className="mb-2 flex text-base tracking-[0.2px] text-white/75">
-                                        Team Name
+                                        File Name
                                     </FormLabel>
                                     <FormControl>
                                         <Input
                                             className="relative m-0 w-full border border-[#3a3a3a] bg-[#242424] py-6 text-white"
                                             disabled={isSubmitting}
                                             {...field}
-                                            placeholder="Team Name"
+                                            placeholder="File Name"
                                         />
                                     </FormControl>
 

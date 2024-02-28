@@ -77,7 +77,7 @@ const Sidebar = () => {
     return (
         <aside className="fixed flex h-screen w-[275px] flex-col border-r border-neutral-700 p-[22px] drop-shadow">
             {/* Team CTA links => Top section */}
-            <div className="">
+            <div className="flex items-center">
                 {/* Team Info & CTA options */}
                 <Popover>
                     {/* Active Team */}
@@ -105,7 +105,10 @@ const Sidebar = () => {
                         </div>
                     </PopoverTrigger>
 
-                    <PopoverContent className="w-[210px] border border-neutral-700 bg-[#171717] p-2">
+                    <PopoverContent
+                        align="start"
+                        className="w-[210px] border border-neutral-700 bg-[#171717] p-2"
+                    >
                         {/* Teams options */}
                         <ul className="flex flex-col gap-2">
                             {/* TODO: Get teams from DB */}
