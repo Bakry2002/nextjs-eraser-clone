@@ -13,11 +13,19 @@ import {
 } from '@/components/ui/dialog';
 import { CreateFileForm } from './craete-file-form';
 
-const CTALinks = () => {
+const CTALinks = ({
+    activeTeam,
+    totalFiles,
+    updateTotalFiles,
+}: {
+    activeTeam: any;
+    totalFiles: number;
+    updateTotalFiles: () => void;
+}) => {
     // extract the first item from the array
     const active = CTAMenu[0];
     const [activeLink, setActiveLink] = useState(CTAMenu[0]);
-    console.log('Active Link: ', activeLink);
+
     return (
         <>
             <ul className="flex flex-1 flex-col justify-end gap-2">
@@ -25,7 +33,7 @@ const CTALinks = () => {
                     <div className="mt-8 flex-1">
                         <li
                             onClick={() => setActiveLink(active)}
-                            key={active.id}
+                            key={active.path}
                             className={cn(
                                 'flex cursor-pointer items-center gap-2 rounded-sm px-4 py-1.5 text-sm font-bold text-white transition',
 
@@ -62,16 +70,42 @@ const CTALinks = () => {
 
             {/* Add new file button */}
 
-            <NameDialog />
+            <Dialog>
+                <DialogTrigger asChild className="w-full">
+                    <Button
+                        variant="default"
+                        className="mt-3 flex justify-start bg-blue-500 px-4 hover:bg-blue-500/75"
+                    >
+                        New File
+                    </Button>
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle className="">Create New File</DialogTitle>
+                    </DialogHeader>
+                    <DialogDescription>
+                        <CreateFileForm
+                            updateTotalFiles={updateTotalFiles}
+                            activeTeam={activeTeam}
+                            className="w-full p-0 px-4 sm:w-full"
+                            fromDialog={true}
+                        />
+                    </DialogDescription>
+                </DialogContent>
+            </Dialog>
 
             {/* Progress bar => File creation limit */}
             <div className="mt-5 h-4 w-full rounded-full bg-neutral-800">
                 {/* TODO: Change the percentage dynamically */}
-                <div className="h-4 w-[40%] rounded-full bg-blue-500"></div>
+                <div
+                    style={{ width: `${(totalFiles / 5) * 100}%` }}
+                    className={`h-4 rounded-full bg-blue-500`}
+                ></div>
             </div>
             <div className="mb-2">
                 <h2 className="mt-4 text-xs">
-                    <strong>1</strong> out of <strong>5</strong> files used.
+                    <strong>{totalFiles}</strong> out of <strong>5</strong>{' '}
+                    files used.
                 </h2>
                 <p className="text-xs">
                     <span className="underline">Upgrade</span> your plan for
@@ -83,29 +117,3 @@ const CTALinks = () => {
 };
 
 export default CTALinks;
-
-export const NameDialog = () => {
-    return (
-        <Dialog>
-            <DialogTrigger asChild className="w-full">
-                <Button
-                    variant="default"
-                    className="mt-3 flex justify-start bg-blue-500 px-4 hover:bg-blue-500/75"
-                >
-                    New File
-                </Button>
-            </DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle className="">Create New File</DialogTitle>
-                </DialogHeader>
-                <DialogDescription>
-                    <CreateFileForm
-                        className="w-full sm:w-full"
-                        fromDialog={true}
-                    />
-                </DialogDescription>
-            </DialogContent>
-        </Dialog>
-    );
-};

@@ -52,8 +52,8 @@ export const CreateTeamForm = ({
                 name: values.name,
                 createdBy: user?.email ?? '',
             }).then(() => {
-                console.log({ values });
                 toast.success('Team created successfully');
+                router.refresh();
                 router.push('/dashboard');
             });
         } catch (error) {

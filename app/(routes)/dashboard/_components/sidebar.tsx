@@ -35,14 +35,17 @@ interface TeamProps {
 }
 
 const Sidebar = () => {
+    const convex = useConvex();
+    const router = useRouter();
+
     const [teamList, setTeamList] = useState<TeamProps[]>();
     const [isTeamLoading, setIsTeamLoading] = useState(false);
     const [activeTeam, setActiveTeam] = useState<TeamProps | null>(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+    const [totalFiles, setTotalFiles] = useState<number>(0);
+
     const { user, isLoading } = useKindeBrowserClient();
-    const convex = useConvex();
-    const router = useRouter();
 
     useEffect(() => {
         user && checkTeams();
@@ -61,7 +64,7 @@ const Sidebar = () => {
 
     useEffect(() => {
         user && getTeamList();
-    }, [user]);
+    }, [user, teamList]);
 
     const getTeamList = async () => {
         setIsTeamLoading(true);
@@ -72,6 +75,18 @@ const Sidebar = () => {
         setTeamList(result);
         setActiveTeam(result[0]);
         setIsTeamLoading(false);
+    };
+
+    useEffect(() => {
+        (totalFiles || activeTeam) && getFiles();
+    }, [totalFiles, activeTeam]);
+
+    const getFiles = async () => {
+        const result = await convex.query(api.files.getFiles, {
+            teamId: activeTeam?._id ?? '',
+        });
+
+        setTotalFiles(result?.length);
     };
 
     return (
@@ -133,11 +148,11 @@ const Sidebar = () => {
 
                         {/* CTA Options */}
                         <ul className="flex flex-col gap-1">
-                            {teamMenu.map((item) => (
+                            {teamMenu.map((item, index) => (
                                 <>
                                     <Link
+                                        key={index}
                                         href={item.path}
-                                        key={item.id}
                                         className="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1 text-sm font-medium text-white hover:bg-neutral-800"
                                     >
                                         <item.icon className="h-4 w-4" />
@@ -183,7 +198,11 @@ const Sidebar = () => {
 
             {/* Other CTA links => Bottom section */}
 
-            <CTALinks />
+            <CTALinks
+                activeTeam={activeTeam}
+                totalFiles={totalFiles}
+                updateTotalFiles={getFiles}
+            />
         </aside>
     );
 };

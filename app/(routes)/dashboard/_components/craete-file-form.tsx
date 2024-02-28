@@ -15,12 +15,15 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
-import { useMutation } from 'convex/react';
+import { useConvex, useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { DialogClose } from '@/components/ui/dialog';
+import { createFile, getFiles } from '@/convex/files';
+import { revalidatePath } from 'next/cache';
+import { useEffect } from 'react';
 
 const formSchema = z.object({
     name: z.string().min(1, { message: 'Name is required' }),
@@ -29,13 +32,18 @@ const formSchema = z.object({
 export const CreateFileForm = ({
     className,
     fromDialog = false,
+    activeTeam,
+    updateTotalFiles,
 }: {
     className?: string;
     fromDialog?: boolean;
+    activeTeam: any;
+    updateTotalFiles: () => void;
 }) => {
+    const convex = useConvex();
     const router = useRouter();
     const { user } = useKindeBrowserClient();
-    const createTeam = useMutation(api.teams.createTeam);
+    const createFile = useMutation(api.files.createFile);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema), // use zod to validate form
@@ -48,15 +56,18 @@ export const CreateFileForm = ({
     const { isValid, isSubmitting } = form.formState;
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
-            await createTeam({
+            await createFile({
                 name: values.name,
+                teamId: activeTeam?._id,
                 createdBy: user?.email ?? '',
-            }).then(() => {
-                console.log({ values });
-                toast.success('File created successfully');
-                router.push('/dashboard');
-                router.refresh();
+                archive: false,
+                document: '',
+                whiteboard: '',
             });
+            updateTotalFiles();
+            toast.success('File created successfully');
+            router.refresh();
+            router.push('/dashboard');
         } catch (error) {
             toast.error('Error creating team!');
         }

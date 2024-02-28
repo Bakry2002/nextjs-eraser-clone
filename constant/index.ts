@@ -5,7 +5,6 @@ import {
     LayoutGrid,
     LogOut,
     Settings,
-    User,
     Users,
 } from 'lucide-react';
 
