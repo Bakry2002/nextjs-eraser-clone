@@ -70,10 +70,10 @@ const Header = () => {
                             <li>
                                 <Link
                                     className="text-white transition hover:text-white/75"
-                                    href="#"
+                                    href="/dashboard"
                                 >
                                     {' '}
-                                    About{' '}
+                                    Dashboard{' '}
                                 </Link>
                             </li>
 

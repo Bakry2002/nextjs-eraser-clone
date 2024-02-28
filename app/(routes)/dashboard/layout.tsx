@@ -3,7 +3,7 @@ import Sidebar from './_components/sidebar';
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     return (
-        <div>
+        <div className="">
             <div className="grid grid-cols-4">
                 <div>
                     <Sidebar />

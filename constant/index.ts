@@ -1,4 +1,13 @@
-import { LogOut, Settings, User, Users } from 'lucide-react';
+import {
+    Archive,
+    Flag,
+    Github,
+    LayoutGrid,
+    LogOut,
+    Settings,
+    User,
+    Users,
+} from 'lucide-react';
 
 export const teamMenu = [
     {
@@ -12,5 +21,36 @@ export const teamMenu = [
         name: 'Settings',
         path: '/teams/settings',
         icon: Settings,
+    },
+];
+
+export const CTAMenu = [
+    {
+        id: 1,
+        name: 'All Files',
+        path: '/dashboard/all',
+        icon: LayoutGrid,
+        isBeta: false,
+    },
+    {
+        id: 2,
+        name: 'Getting Started',
+        path: '/dashboard/getting-started',
+        icon: Flag,
+        isBeta: false,
+    },
+    {
+        id: 3,
+        name: 'Github Sync',
+        path: '/teams/settings',
+        icon: Github,
+        isBeta: true,
+    },
+    {
+        id: 4,
+        name: 'Archive',
+        path: '/dashboard/archived',
+        icon: Archive,
+        isBeta: false,
     },
 ];
