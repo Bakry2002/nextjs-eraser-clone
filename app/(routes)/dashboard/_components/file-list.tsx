@@ -12,9 +12,23 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
 
 import Image from 'next/image';
-import { Archive, ArrowRightLeft, MoreHorizontal } from 'lucide-react';
+import {
+    Archive,
+    ArrowRightLeft,
+    Edit,
+    MoreHorizontal,
+    Trash2,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export type FileProps = {
@@ -27,6 +41,8 @@ export type FileProps = {
     teamId: string;
     _creationTime: number;
 };
+import { Skeleton } from '@/components/ui/skeleton';
+import { CreateFileForm } from './craete-file-form';
 
 const FileList = () => {
     const { user } = useKindeBrowserClient();
@@ -34,10 +50,14 @@ const FileList = () => {
     const { fileList_ } = useContext(FileListContext);
 
     const [fileList, setFileList] = useState<any>();
+    const [loading, setLoading] = useState(true);
+    const [isRename, setIsRename] = useState(false);
+    console.log('Rename', isRename);
 
     useEffect(() => {
         fileList_ && setFileList(fileList_);
         console.log('fileList_', fileList_);
+        setLoading(false);
     }, [fileList_]);
 
     return (
@@ -62,14 +82,14 @@ const FileList = () => {
                 </thead>
 
                 <tbody className="divide-y divide-neutral-800">
-                    {fileList &&
+                    {!loading && fileList && fileList.length > 0 ? (
                         fileList.map((file: FileProps) => (
                             <tr
                                 key={file?._id}
+                                className="cursor-pointer transition hover:bg-neutral-800/75"
                                 onClick={() =>
                                     router.push(`/workspace/${file?._id}`)
                                 }
-                                className="cursor-pointer transition hover:bg-neutral-800/75"
                             >
                                 <td className="whitespace-nowrap px-4 py-2 font-medium text-white">
                                     {file?.name}
@@ -96,28 +116,49 @@ const FileList = () => {
                                 <td className="whitespace-nowrap px-4 py-2 text-white">
                                     <DropdownMenu>
                                         <DropdownMenuTrigger>
-                                            <MoreHorizontal />
+                                            <span className="sr-only">
+                                                Open menu
+                                            </span>
+                                            <MoreHorizontal className="h-4 w-4" />
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent className="border border-neutral-700 bg-[#171717] text-white">
+                                            <DropdownMenuItem className="gap-2">
+                                                <Edit className=" h-4 w-4" />
+                                                Rename
+                                            </DropdownMenuItem>
+
                                             <DropdownMenuItem className="gap-2">
                                                 <Archive className=" h-4 w-4" />
                                                 Archive
                                             </DropdownMenuItem>
                                             <DropdownMenuItem className="gap-2">
-                                                <ArrowRightLeft className=" h-4 w-4" />
-                                                Switch file
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem>
-                                                Team
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem>
-                                                Subscription
+                                                <Trash2 className=" h-4 w-4" />
+                                                Delete
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </td>
                             </tr>
-                        ))}
+                        ))
+                    ) : (
+                        <tr>
+                            <td className="whitespace-nowrap px-4 py-2 font-medium text-white">
+                                <Skeleton className="h-4 w-[200px]" />
+                            </td>
+                            <td className="whitespace-nowrap px-4 py-2 font-medium text-white">
+                                <Skeleton className="h-4 w-[200px]" />
+                            </td>
+                            <td className="whitespace-nowrap px-4 py-2 font-medium text-white">
+                                <Skeleton className="h-4 w-[200px]" />
+                            </td>
+                            <td className="whitespace-nowrap px-4 py-2 font-medium text-white">
+                                <Skeleton className="h-4 w-[200px]" />
+                            </td>
+                            <td className="whitespace-nowrap px-4 py-2 font-medium text-white">
+                                <Skeleton className="h-4 w-[200px]" />
+                            </td>
+                        </tr>
+                    )}
                 </tbody>
             </table>
         </div>

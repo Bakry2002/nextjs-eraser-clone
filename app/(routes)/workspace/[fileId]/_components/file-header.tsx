@@ -1,15 +1,17 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import { Separator } from '@/components/ui/separator';
 import {
     Archive,
     ArrowRightLeft,
     LayoutDashboard,
-    Link,
+    LinkIcon,
     MoreHorizontal,
     Save,
     Share,
+    Trash2,
 } from 'lucide-react';
 import Image from 'next/image';
 import React, { useContext } from 'react';
@@ -21,20 +23,46 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { useRouter } from 'next/navigation';
 import { SaveTriggerContext } from '@/context/save-trigger-context';
 import { FileListContext } from '@/context/file-list-context';
+import { useConvex, useMutation } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import { FileProps } from '@/app/(routes)/dashboard/_components/file-list';
+import { toast } from 'sonner';
 
-const FileHeader = ({ fileName }: { fileName: string }) => {
+const FileHeader = ({ file }: { file: FileProps }) => {
     const router = useRouter();
+
     const { setSaveTrigger_, saveTrigger_ } = useContext(SaveTriggerContext);
+
+    const deleteFile = useMutation(api.files.deleteFile);
+    const handleDelete = () => {
+        deleteFile({ _id: file?._id as any }).then((res) => {
+            toast.success('File deleted successfully');
+            router.push('/dashboard');
+        });
+    };
 
     return (
         <div className="flex flex-col items-center justify-between gap-y-4 border-b border-neutral-800 p-3 sm:flex-row">
             {/* File name */}
             <div className="flex items-center justify-start gap-2">
-                <Image src="/logo.png" alt="Logo" width={40} height={40} />
-                <h2 className="text-sm font-semibold">{fileName}</h2>
+                <Link href="/dashboard">
+                    <Image src="/logo.png" alt="Logo" width={40} height={40} />
+                </Link>
+                <h2 className="text-sm font-semibold">{file?.name}</h2>
                 <DropdownMenu>
                     <DropdownMenuTrigger>
                         <MoreHorizontal />
@@ -55,7 +83,34 @@ const FileHeader = ({ fileName }: { fileName: string }) => {
                             <ArrowRightLeft className=" h-4 w-4" />
                             Switch file
                         </DropdownMenuItem>
-                        <DropdownMenuItem>Subscription</DropdownMenuItem>
+
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button className="h-8 w-full justify-start gap-2 rounded-md  px-0 pl-2 hover:bg-red-500 hover:text-white">
+                                    <Trash2 className="h-4  w-4" /> Delete
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>
+                                        Are you absolutely sure?
+                                    </AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This action cannot be undone. This will
+                                        permanently delete the file and remove
+                                        your data inside it.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>
+                                        Cancel
+                                    </AlertDialogCancel>
+                                    <AlertDialogAction onClick={handleDelete}>
+                                        Continue
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
@@ -97,7 +152,7 @@ const FileHeader = ({ fileName }: { fileName: string }) => {
                 </Button>
                 {/* Share button */}
                 <Button className="hidden h-8 items-center justify-center gap-2 bg-blue-500  hover:bg-blue-500/75 sm:flex">
-                    Share <Link className="h-4 w-4" />
+                    Share <LinkIcon className="h-4 w-4" />
                 </Button>
             </div>
         </div>

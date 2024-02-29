@@ -47,6 +47,46 @@ export const getFileById = query({
     },
 });
 
+// DELETE FILE
+export const deleteFile = mutation({
+    args: { _id: v.id('files') },
+    handler: async (ctx, args) => {
+        const result = await ctx.db.delete(args._id);
+
+        return result;
+    },
+});
+
+// ARCHIVE FILE
+export const archiveFile = mutation({
+    args: {
+        _id: v.id('files'),
+        archive: v.boolean(),
+    },
+    handler: async (ctx, args) => {
+        const result = await ctx.db.patch(args._id, {
+            archive: args.archive,
+        });
+
+        return result;
+    },
+});
+
+// UPDATE NAME
+export const updateFileName = mutation({
+    args: {
+        _id: v.id('files'),
+        name: v.string(),
+    },
+    handler: async (ctx, args) => {
+        const result = await ctx.db.patch(args._id, {
+            name: args.name,
+        });
+
+        return result;
+    },
+});
+
 // UPDATE DOCUMENT
 export const updateDocument = mutation({
     args: {
