@@ -33,17 +33,19 @@ const FileResizablePanel = ({ file }: { file: FileProps }) => {
                     className="min-h-[200px]"
                 >
                     {viewType_ === 'document' && (
-                        <ResizablePanel minSize={25}>
+                        <ResizablePanel minSize={25} className="">
                             {/* 1. Document */}
-                            <div className={` h-[calc(100vh-58.4px)]`}>
+                            <div
+                                className={`h-[calc(100vh-58.4px)] overflow-y-auto`}
+                            >
                                 <Editor file={file} />
                             </div>
                         </ResizablePanel>
                     )}
                     {viewType_ === 'canvas' && (
-                        <ResizablePanel minSize={50}>
+                        <ResizablePanel minSize={50} className="">
                             {/* 2. WhiteBoard/Canvas  */}
-                            <div className="h-[calc(100vh-58.4px)] border-l border-neutral-800">
+                            <div className="h-[calc(100vh-58.4px)]  overflow-y-auto border-l border-neutral-800">
                                 {/* <Canvas file={file} /> */}
                                 <CanvasWrapper file={file} />
                             </div>
@@ -54,7 +56,9 @@ const FileResizablePanel = ({ file }: { file: FileProps }) => {
                         <>
                             <ResizablePanel minSize={25}>
                                 {/* 1. Document */}
-                                <div className={` h-[calc(100vh-58.4px)]`}>
+                                <div
+                                    className={` h-[calc(100vh-58.4px)] overflow-y-auto`}
+                                >
                                     <Editor file={file} />
                                 </div>
                             </ResizablePanel>
@@ -64,7 +68,7 @@ const FileResizablePanel = ({ file }: { file: FileProps }) => {
                             />
                             <ResizablePanel minSize={50}>
                                 {/* 2. WhiteBoard/Canvas  */}
-                                <div className="h-[calc(100vh-58.4px)] border-l border-neutral-800">
+                                <div className="h-[calc(100vh-58.4px)] overflow-y-auto border-l border-neutral-800">
                                     {/* <Canvas file={file} /> */}
                                     <CanvasWrapper file={file} />
                                 </div>
