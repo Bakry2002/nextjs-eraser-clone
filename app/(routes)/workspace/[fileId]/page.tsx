@@ -2,6 +2,7 @@ import FileHeader from './_components/file-header';
 import { fetchQuery } from 'convex/nextjs';
 import { api } from '@/convex/_generated/api';
 import FileResizablePanel from './_components/file-resizable-panel';
+import { Suspense } from 'react';
 
 const FilePage = async ({ params }: { params: { fileId?: string } }) => {
     const { fileId } = params;

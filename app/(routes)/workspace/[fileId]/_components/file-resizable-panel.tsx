@@ -11,7 +11,7 @@ import Canvas from './canvas';
 import Editor from './editor';
 import { useContext } from 'react';
 import { ViewTypeContext } from '@/context/view-type-context';
-import Image from 'next/image';
+import CanvasWrapper from './canvas-wrapper';
 
 const FileResizablePanel = ({ file }: { file: FileProps }) => {
     const { viewType_ } = useContext(ViewTypeContext);
@@ -44,7 +44,8 @@ const FileResizablePanel = ({ file }: { file: FileProps }) => {
                         <ResizablePanel minSize={50}>
                             {/* 2. WhiteBoard/Canvas  */}
                             <div className="h-[calc(100vh-58.4px)] border-l border-neutral-800">
-                                <Canvas file={file} />
+                                {/* <Canvas file={file} /> */}
+                                <CanvasWrapper file={file} />
                             </div>
                         </ResizablePanel>
                     )}
@@ -64,7 +65,8 @@ const FileResizablePanel = ({ file }: { file: FileProps }) => {
                             <ResizablePanel minSize={50}>
                                 {/* 2. WhiteBoard/Canvas  */}
                                 <div className="h-[calc(100vh-58.4px)] border-l border-neutral-800">
-                                    <Canvas file={file} />
+                                    {/* <Canvas file={file} /> */}
+                                    <CanvasWrapper file={file} />
                                 </div>
                             </ResizablePanel>
                         </>
