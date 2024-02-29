@@ -27,6 +27,7 @@ import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { FileProps } from '@/app/(routes)/dashboard/_components/file-list';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 const rowDocument = {
     time: 1629782400000,
@@ -53,6 +54,7 @@ const rowDocument = {
 const Editor = ({ file }: { file: FileProps }) => {
     const { saveTrigger_ } = useContext(SaveTriggerContext);
     const updateDocument = useMutation(api.files.updateDocument);
+    const router = useRouter();
 
     const rowDocument = {
         time: 1629782400000,
@@ -95,6 +97,7 @@ const Editor = ({ file }: { file: FileProps }) => {
                     }).then(
                         (res) => {
                             toast.success('Document updated!');
+                            router.refresh();
                         },
                         (error) => {
                             toast.error('Failed to update document');

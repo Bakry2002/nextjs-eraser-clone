@@ -23,7 +23,7 @@ export type FileProps = {
     archive: boolean;
     createdBy: string;
     document: string;
-    whiteBoard: string;
+    whiteboard: string;
     teamId: string;
     _creationTime: number;
 };
