@@ -34,14 +34,14 @@ export const CTAMenu = [
     {
         id: 2,
         name: 'Getting Started',
-        path: '/dashboard/getting-started',
+        path: '/dashboard',
         icon: Flag,
         isBeta: false,
     },
     {
         id: 3,
         name: 'Github Sync',
-        path: '/teams/settings',
+        path: '/dashboard',
         icon: Github,
         isBeta: true,
     },

@@ -110,7 +110,7 @@ const FileList = () => {
                                         alt="user"
                                         width={30}
                                         height={30}
-                                        className="rounded-full"
+                                        className="rounded-full bg-blue-500/75"
                                     />
                                 </td>
                                 <td className="relative z-50 whitespace-nowrap px-4 py-2 text-white">
