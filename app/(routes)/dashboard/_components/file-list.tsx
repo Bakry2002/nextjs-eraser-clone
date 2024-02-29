@@ -51,8 +51,6 @@ const FileList = () => {
 
     const [fileList, setFileList] = useState<any>();
     const [loading, setLoading] = useState(true);
-    const [isRename, setIsRename] = useState(false);
-    console.log('Rename', isRename);
 
     useEffect(() => {
         fileList_ && setFileList(fileList_);
@@ -82,7 +80,13 @@ const FileList = () => {
                 </thead>
 
                 <tbody className="divide-y divide-neutral-800">
-                    {!loading && fileList && fileList.length > 0 ? (
+                    {!loading && !fileList && fileList?.length === 0 && (
+                        <tr>
+                            <td>No File Founds!</td>
+                        </tr>
+                    )}
+
+                    {!loading && fileList && fileList.length !== null ? (
                         fileList.map((file: FileProps) => (
                             <tr
                                 key={file?._id}
@@ -110,7 +114,7 @@ const FileList = () => {
                                         alt="user"
                                         width={30}
                                         height={30}
-                                        className="rounded-full bg-blue-500/75"
+                                        className="rounded-full"
                                     />
                                 </td>
                                 <td className="relative z-50 whitespace-nowrap px-4 py-2 text-white">
@@ -121,7 +125,7 @@ const FileList = () => {
                                             </span>
                                             <MoreHorizontal className="h-4 w-4" />
                                         </DropdownMenuTrigger>
-                                        <DropdownMenuContent className="relative z-50 border border-neutral-700 bg-[#171717] text-white">
+                                        <DropdownMenuContent className="border border-neutral-700 bg-[#171717] text-white">
                                             <DropdownMenuItem className="gap-2">
                                                 <Edit className=" h-4 w-4" />
                                                 Rename
@@ -142,20 +146,20 @@ const FileList = () => {
                         ))
                     ) : (
                         <tr>
-                            <td className="whitespace-nowrap px-4 py-2 font-medium text-white">
-                                <Skeleton className="h-4 w-[200px]" />
+                            <td className="whitespace-nowrap px-4 py-2 font-medium text-neutral-800">
+                                <Skeleton className="h-4 w-[200px] bg-neutral-800" />
                             </td>
-                            <td className="whitespace-nowrap px-4 py-2 font-medium text-white">
-                                <Skeleton className="h-4 w-[200px]" />
+                            <td className="whitespace-nowrap px-4 py-2 font-medium text-neutral-800">
+                                <Skeleton className="h-4 w-[200px] bg-neutral-800" />
                             </td>
-                            <td className="whitespace-nowrap px-4 py-2 font-medium text-white">
-                                <Skeleton className="h-4 w-[200px]" />
+                            <td className="whitespace-nowrap px-4 py-2 font-medium text-neutral-800">
+                                <Skeleton className="h-4 w-[200px] bg-neutral-800" />
                             </td>
-                            <td className="whitespace-nowrap px-4 py-2 font-medium text-white">
-                                <Skeleton className="h-4 w-[200px]" />
+                            <td className="whitespace-nowrap px-4 py-2 font-medium text-neutral-800">
+                                <Skeleton className="h-4 w-[200px] bg-neutral-800" />
                             </td>
-                            <td className="whitespace-nowrap px-4 py-2 font-medium text-white">
-                                <Skeleton className="h-4 w-[200px]" />
+                            <td className="whitespace-nowrap px-4 py-2 font-medium text-neutral-800">
+                                <Skeleton className="h-4 w-[200px] bg-neutral-800" />
                             </td>
                         </tr>
                     )}

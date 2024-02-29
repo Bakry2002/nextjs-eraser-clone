@@ -63,72 +63,7 @@ const Header = () => {
                 </Link>
 
                 {/* Nav */}
-                <div className="flex flex-1 items-center justify-end md:justify-between">
-                    {/* Links */}
-                    <nav aria-label="Global" className="hidden md:block">
-                        <ul className="flex items-center gap-6 text-sm">
-                            <li>
-                                <Link
-                                    className="text-white transition hover:text-white/75"
-                                    href="/dashboard"
-                                >
-                                    {' '}
-                                    Dashboard{' '}
-                                </Link>
-                            </li>
-
-                            <li>
-                                <Link
-                                    className="text-white transition hover:text-white/75"
-                                    href="#"
-                                >
-                                    {' '}
-                                    Careers{' '}
-                                </Link>
-                            </li>
-
-                            <li>
-                                <Link
-                                    className="text-white transition hover:text-white/75"
-                                    href="#"
-                                >
-                                    {' '}
-                                    History{' '}
-                                </Link>
-                            </li>
-
-                            <li>
-                                <Link
-                                    className="text-white transition hover:text-white/75"
-                                    href="#"
-                                >
-                                    {' '}
-                                    Services{' '}
-                                </Link>
-                            </li>
-
-                            <li>
-                                <Link
-                                    className="text-white transition hover:text-white/75"
-                                    href="#"
-                                >
-                                    {' '}
-                                    Projects{' '}
-                                </Link>
-                            </li>
-
-                            <li>
-                                <Link
-                                    className="text-white transition hover:text-white/75"
-                                    href="#"
-                                >
-                                    {' '}
-                                    Blog{' '}
-                                </Link>
-                            </li>
-                        </ul>
-                    </nav>
-
+                <div className="flex flex-1 items-center justify-end ">
                     {/* CTA */}
                     <div className="flex items-center gap-4">
                         {isLoading && (
@@ -151,12 +86,6 @@ const Header = () => {
                             </div>
                         )}
 
-                        {/* {user?.email && (
-                            <p className="mb-3 text-center text-xs">
-                                Logged in as {user?.email}
-                            </p>
-                        )} */}
-
                         {!isLoading && isAuthenticated && (
                             <Button>
                                 <LogoutLink>Logout</LogoutLink>
@@ -164,7 +93,7 @@ const Header = () => {
                         )}
 
                         {!isLoading && !isAuthenticated && (
-                            <div className="hidden sm:flex sm:gap-4">
+                            <div className="flex sm:gap-4">
                                 <LoginLink
                                     postLoginRedirectURL="/dashboard"
                                     className={cn(
@@ -187,12 +116,6 @@ const Header = () => {
                                 </RegisterLink>
                             </div>
                         )}
-
-                        {/* Mobile toggle */}
-                        <button className="block rounded p-2.5 text-white transition hover:text-white/75 md:hidden">
-                            <span className="sr-only">Toggle menu</span>
-                            <Menu className="h-8 w-8" />
-                        </button>
                     </div>
                 </div>
             </div>

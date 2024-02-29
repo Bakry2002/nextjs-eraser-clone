@@ -18,7 +18,7 @@ export const teamMenu = [
     {
         id: 2,
         name: 'Settings',
-        path: '/teams/settings',
+        path: '/dashboard',
         icon: Settings,
     },
 ];

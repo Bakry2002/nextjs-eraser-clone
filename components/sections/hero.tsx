@@ -49,9 +49,9 @@ const HeroSection = () => {
                             <Link
                                 className="active:bg-white-500 flex w-full items-center justify-center rounded bg-white px-8 py-3.5 text-sm 
                                 font-medium text-black shadow hover:bg-white/75 focus:outline-none focus:ring sm:w-auto"
-                                href="#"
+                                href="/dashboard"
                             >
-                                Try Eraser
+                                Go to Dashboard
                                 <ArrowRight className="ml-2 h-4 w-4" />
                             </Link>
                         </div>
