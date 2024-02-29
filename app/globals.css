@@ -2,6 +2,84 @@
 @tailwind components;
 @tailwind utilities;
 
+h1.ce-header {
+    @apply text-3xl font-bold;
+}
+h2.ce-header {
+    @apply text-2xl font-semibold;
+}
+h3.ce-header {
+    @apply text-xl font-semibold;
+}
+h4.ce-header {
+    @apply text-lg font-semibold;
+}
+h5.ce-header {
+    @apply text-base font-semibold;
+}
+h6.ce-header {
+    @apply text-base font-semibold;
+}
+
+.ce-conversion-toolbar {
+    @apply border-neutral-700 bg-neutral-800 text-white !important;
+}
+.ce-conversion-tool__icon {
+    @apply bg-neutral-800 text-white !important;
+}
+
+.ce-toolbar__actions > * {
+    @apply text-white hover:bg-neutral-700 !important;
+}
+
+.ce-conversion-tool--focused {
+    @apply bg-neutral-700 !important;
+}
+.ce-inline-tool-input {
+    @apply border-neutral-700 bg-neutral-800 text-white !important;
+}
+
+.codex-editor::selection {
+    @apply bg-blue-800 text-white opacity-100 !important;
+}
+
+.ce-inline-toolbar {
+    @apply border border-neutral-700 bg-neutral-800 text-white !important;
+}
+
+.ce-inline-toolbar__dropdown,
+.ce-inline-tool {
+    @apply w-full rounded-md hover:bg-neutral-700 !important;
+}
+
+.codex-editor ::selection {
+    @apply bg-blue-800 text-white !important;
+}
+
+.ce-toolbar__plus,
+.ce-toolbar__settings-btn {
+    @apply bg-neutral-800 text-white !important;
+}
+
+.ce-block--selected .ce-block__content {
+    @apply rounded bg-neutral-700 !important;
+}
+
+.cdx-notify,
+.cdx-notify--error {
+    @apply bg-neutral-800 text-white !important;
+}
+.cdx-notify--error {
+    background: none !important;
+}
+.ce-code__textarea {
+    background: none;
+}
+
+.ce-code__textarea {
+    @apply border-neutral-700 bg-neutral-800 text-white !important;
+}
+
 @layer base {
     :root {
         --background: 0 0% 100%;
@@ -77,4 +155,8 @@
 
 body {
     @apply text-white;
+}
+
+.cdx-notify--error {
+    background: none !important;
 }

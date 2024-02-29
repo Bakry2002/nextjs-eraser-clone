@@ -14,7 +14,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import Image from 'next/image';
-import { Archive, MoreHorizontal } from 'lucide-react';
+import { Archive, ArrowRightLeft, MoreHorizontal } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export type FileProps = {
     _id: string;
@@ -29,7 +30,9 @@ export type FileProps = {
 
 const FileList = () => {
     const { user } = useKindeBrowserClient();
+    const router = useRouter();
     const { fileList_ } = useContext(FileListContext);
+
     const [fileList, setFileList] = useState<any>();
 
     useEffect(() => {
@@ -39,7 +42,7 @@ const FileList = () => {
 
     return (
         <div className="overflow-x-auto rounded-lg border border-neutral-800">
-            <table className="min-w-full divide-y-2 divide-neutral-700  bg-neutral-700 text-sm">
+            <table className="min-w-full divide-y-2 divide-neutral-800  bg-[#171717] text-sm">
                 <thead className="bg-neutral-800 text-left">
                     <tr>
                         <th className="whitespace-nowrap px-4 py-2 font-medium text-white">
@@ -61,7 +64,13 @@ const FileList = () => {
                 <tbody className="divide-y divide-neutral-800">
                     {fileList &&
                         fileList.map((file: FileProps) => (
-                            <tr key={file?._id}>
+                            <tr
+                                key={file?._id}
+                                onClick={() =>
+                                    router.push(`/workspace/${file?._id}`)
+                                }
+                                className="cursor-pointer transition hover:bg-neutral-800/75"
+                            >
                                 <td className="whitespace-nowrap px-4 py-2 font-medium text-white">
                                     {file?.name}
                                 </td>
@@ -94,8 +103,9 @@ const FileList = () => {
                                                 <Archive className=" h-4 w-4" />
                                                 Archive
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem>
-                                                Billing
+                                            <DropdownMenuItem className="gap-2">
+                                                <ArrowRightLeft className=" h-4 w-4" />
+                                                Switch file
                                             </DropdownMenuItem>
                                             <DropdownMenuItem>
                                                 Team

@@ -36,3 +36,27 @@ export const getFiles = query({
         return result;
     },
 });
+
+export const getFileById = query({
+    args: { _id: v.id('files') },
+    handler: async (ctx, args) => {
+        const file = await ctx.db.get(args._id);
+
+        return file;
+    },
+});
+// GET FILE BY ID
+// export const getFileById = query({
+//     args: {
+//         _id: v.string(),
+//     },
+
+//     handler: async (ctx, args) => {
+//         const result = await ctx.db
+//             .query('files')
+//             .filter((q) => q.eq(q.field('_id'), args._id))
+//             .collect();
+
+//         return result;
+//     },
+// });
