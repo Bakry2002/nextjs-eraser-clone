@@ -18,7 +18,7 @@ const HeroSection = () => {
 
                 <div className="flex items-baseline justify-center py-10">
                     <h2 className="rounded-full border border-white p-2 px-3 text-center text-white">
-                        See what's new |{' '}
+                        See what&apos;s new |{' '}
                         <Link href="/" className="font-medium text-[#95dbff]">
                             AI Diagrams
                         </Link>
