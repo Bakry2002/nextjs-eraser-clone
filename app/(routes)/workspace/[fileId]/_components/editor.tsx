@@ -168,6 +168,7 @@ const Editor = ({ file }: { file: FileProps }) => {
             holder: 'editorjs',
             data: file?.document ? JSON.parse(file?.document) : document,
             placeholder: 'Let`s write an awesome story!',
+            inlineToolbar: true,
         });
         ref.current = editor;
     };
