@@ -1,7 +1,7 @@
 'use client';
 
 import EditorJS from '@editorjs/editorjs';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import Header from '@editorjs/header';
 
 // @ts-expect-error
@@ -22,6 +22,11 @@ import CodeTool from '@editorjs/code';
 import Underline from '@editorjs/underline';
 // @ts-expect-error
 import DragDrop from 'editorjs-drag-drop';
+import { SaveTriggerContext } from '@/context/save-trigger-context';
+import { useMutation } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import { FileProps } from '@/app/(routes)/dashboard/_components/file-list';
+import { toast } from 'sonner';
 
 const rowDocument = {
     time: 1629782400000,
@@ -45,13 +50,16 @@ const rowDocument = {
     version: '2.8.1',
 };
 
-const Editor = ({ fileName }: { fileName: string }) => {
+const Editor = ({ file }: { file: FileProps }) => {
+    const { saveTrigger_ } = useContext(SaveTriggerContext);
+    const updateDocument = useMutation(api.files.updateDocument);
+
     const rowDocument = {
         time: 1629782400000,
         blocks: [
             {
                 data: {
-                    text: fileName || 'Untitled File',
+                    text: file?.name || 'Untitled File',
                     level: 2,
                 },
                 id: '123',
@@ -71,6 +79,33 @@ const Editor = ({ fileName }: { fileName: string }) => {
     useEffect(() => {
         initEditor();
     }, []);
+
+    useEffect(() => {
+        saveTrigger_ && onSaveDocument();
+    }, [saveTrigger_]);
+
+    const onSaveDocument = () => {
+        if (ref.current) {
+            ref.current
+                .save()
+                .then((outputData) => {
+                    updateDocument({
+                        _id: file?._id as any,
+                        document: JSON.stringify(outputData),
+                    }).then(
+                        (res) => {
+                            toast.success('Document updated!');
+                        },
+                        (error) => {
+                            toast.error('Failed to update document');
+                        },
+                    );
+                })
+                .catch((error) => {
+                    console.log('Saving failed: ', error);
+                });
+        }
+    };
 
     const ref = useRef<EditorJS>();
     const [document, setDocument] = useState<any>(rowDocument);
@@ -128,14 +163,14 @@ const Editor = ({ fileName }: { fileName: string }) => {
                 },
             },
             holder: 'editorjs',
-            data: document,
+            data: file?.document ? JSON.parse(file?.document) : document,
             placeholder: 'Let`s write an awesome story!',
         });
         ref.current = editor;
     };
     return (
-        <div className="mx-10">
-            <div id="editorjs" className="text-white" />
+        <div>
+            <div id="editorjs" className="ml-20 mr-10"></div>
         </div>
     );
 };

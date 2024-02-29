@@ -8,10 +8,11 @@ import {
     LayoutDashboard,
     Link,
     MoreHorizontal,
+    Save,
     Share,
 } from 'lucide-react';
 import Image from 'next/image';
-import React from 'react';
+import React, { useContext } from 'react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -21,9 +22,13 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useRouter } from 'next/navigation';
+import { SaveTriggerContext } from '@/context/save-trigger-context';
+import { FileListContext } from '@/context/file-list-context';
 
 const FileHeader = ({ fileName }: { fileName: string }) => {
     const router = useRouter();
+    const { setSaveTrigger_, saveTrigger_ } = useContext(SaveTriggerContext);
+
     return (
         <div className="flex flex-col items-center justify-between gap-y-4 border-b border-neutral-800 p-3 sm:flex-row">
             {/* File name */}
@@ -80,10 +85,21 @@ const FileHeader = ({ fileName }: { fileName: string }) => {
                 </div>
             </div>
 
-            {/* Share button */}
-            <Button className="hidden h-8 items-center justify-center gap-2 bg-blue-500  hover:bg-blue-500/75 sm:flex">
-                Share <Link className="h-4 w-4" />
-            </Button>
+            <div className="flex items-center gap-4">
+                {/* Save button */}
+                <Button
+                    className="hidden h-8 items-center justify-center gap-2 bg-red-500  hover:bg-red-500/75 sm:flex"
+                    onClick={() => {
+                        setSaveTrigger_(!saveTrigger_);
+                    }}
+                >
+                    Save <Save className="h-4 w-4" />
+                </Button>
+                {/* Share button */}
+                <Button className="hidden h-8 items-center justify-center gap-2 bg-blue-500  hover:bg-blue-500/75 sm:flex">
+                    Share <Link className="h-4 w-4" />
+                </Button>
+            </div>
         </div>
     );
 };

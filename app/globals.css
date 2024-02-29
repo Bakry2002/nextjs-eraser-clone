@@ -65,6 +65,10 @@ h6.ce-header {
     @apply rounded bg-neutral-700 !important;
 }
 
+/* .codex-editor {
+    @apply mx-10 !important;
+} */
+
 .cdx-notify,
 .cdx-notify--error {
     @apply bg-neutral-800 text-white !important;
@@ -78,6 +82,17 @@ h6.ce-header {
 
 .ce-code__textarea {
     @apply border-neutral-700 bg-neutral-800 text-white !important;
+}
+
+/* --------------- Excalidraw Override styles --------------- */
+
+.excalidraw .App-menu_top {
+    grid-gap: 2rem !important;
+}
+
+.welcome-screen-center__logo {
+    justify-content: center !important;
+    margin-bottom: 2rem !important;
 }
 
 @layer base {

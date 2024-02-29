@@ -66,7 +66,6 @@ export const CreateFileForm = ({
             });
             updateTotalFiles();
             toast.success('File created successfully');
-            router.refresh();
             router.push('/dashboard');
         } catch (error) {
             toast.error('Error creating team!');

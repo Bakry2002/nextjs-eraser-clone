@@ -37,6 +37,7 @@ export const getFiles = query({
     },
 });
 
+// GET FILE BY ID
 export const getFileById = query({
     args: { _id: v.id('files') },
     handler: async (ctx, args) => {
@@ -45,18 +46,33 @@ export const getFileById = query({
         return file;
     },
 });
-// GET FILE BY ID
-// export const getFileById = query({
-//     args: {
-//         _id: v.string(),
-//     },
 
-//     handler: async (ctx, args) => {
-//         const result = await ctx.db
-//             .query('files')
-//             .filter((q) => q.eq(q.field('_id'), args._id))
-//             .collect();
+// UPDATE DOCUMENT
+export const updateDocument = mutation({
+    args: {
+        _id: v.id('files'),
+        document: v.string(),
+    },
+    handler: async (ctx, args) => {
+        const result = await ctx.db.patch(args._id, {
+            document: args.document,
+        });
 
-//         return result;
-//     },
-// });
+        return result;
+    },
+});
+
+// UPDATE WHITEBOARD
+export const updateWhiteboard = mutation({
+    args: {
+        _id: v.id('files'),
+        whiteboard: v.string(),
+    },
+    handler: async (ctx, args) => {
+        const result = await ctx.db.patch(args._id, {
+            whiteboard: args.whiteboard,
+        });
+
+        return result;
+    },
+});
