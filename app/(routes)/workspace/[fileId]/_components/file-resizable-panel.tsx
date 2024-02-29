@@ -11,11 +11,22 @@ import Canvas from './canvas';
 import Editor from './editor';
 import { useContext } from 'react';
 import { ViewTypeContext } from '@/context/view-type-context';
+import Image from 'next/image';
 
 const FileResizablePanel = ({ file }: { file: FileProps }) => {
     const { viewType_ } = useContext(ViewTypeContext);
     return (
         <div>
+            {file?.archive && (
+                <div className="h-auto w-full bg-white text-black">
+                    <div>
+                        <h2 className="text-center text-xl font-bold">
+                            This file is archived
+                        </h2>
+                        <p className="text-center">by: {file?.createdBy}</p>
+                    </div>
+                </div>
+            )}
             {file ? (
                 <ResizablePanelGroup
                     direction="horizontal"

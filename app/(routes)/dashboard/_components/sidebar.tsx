@@ -79,7 +79,31 @@ const Sidebar = () => {
         setTeamList(result);
         // setActiveTeam(result[0]);
         setActiveTeam_(result[0]);
+
+        // Check if there is an active team stored in local storage
+        const storedActiveTeamId = localStorage.getItem('activeTeamId');
+        const defaultActiveTeam = result[0];
+
+        if (storedActiveTeamId) {
+            // Find the stored active team by id
+            const storedActiveTeam = result.find(
+                (team) => team._id === storedActiveTeamId,
+            );
+
+            // Set the active team to the stored one if found, otherwise use the default
+            setActiveTeam_(storedActiveTeam || defaultActiveTeam);
+        } else {
+            // Set the active team to the default
+            setActiveTeam_(defaultActiveTeam);
+        }
         setIsTeamLoading(false);
+    };
+
+    const setActiveTeamHandler = (team: TeamProps) => {
+        // Set the active team in the state
+        setActiveTeam_(team);
+        // Store the active team id in local storage
+        localStorage.setItem('activeTeamId', team._id);
     };
 
     useEffect(() => {
@@ -141,7 +165,7 @@ const Sidebar = () => {
                                 teamList?.map((team) => (
                                     <li
                                         onClick={() => {
-                                            setActiveTeam_(team);
+                                            setActiveTeamHandler(team);
                                         }}
                                         key={team._id}
                                         className={`cursor-pointer rounded-sm  px-2 py-1 text-sm font-medium text-white transition hover:bg-neutral-800 ${activeTeam_?._id === team._id && 'bg-blue-500 hover:bg-blue-500'}`}

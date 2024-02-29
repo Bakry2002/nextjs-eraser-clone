@@ -13,7 +13,7 @@ import {
     Trash2,
 } from 'lucide-react';
 import Image from 'next/image';
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import {
     DropdownMenu,
     DropdownMenuContent,
