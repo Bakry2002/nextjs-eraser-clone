@@ -2,7 +2,6 @@
 
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Separator } from '@/components/ui/separator';
 import {
     Archive,
     ArrowRightLeft,
@@ -10,17 +9,14 @@ import {
     LinkIcon,
     MoreHorizontal,
     Save,
-    Share,
     Trash2,
 } from 'lucide-react';
 import Image from 'next/image';
-import React, { useContext } from 'react';
+import { useContext, useState } from 'react';
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
@@ -36,16 +32,18 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useRouter } from 'next/navigation';
 import { SaveTriggerContext } from '@/context/save-trigger-context';
-import { FileListContext } from '@/context/file-list-context';
-import { useConvex, useMutation } from 'convex/react';
+import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { FileProps } from '@/app/(routes)/dashboard/_components/file-list';
 import { toast } from 'sonner';
+import { ViewTypeContext } from '@/context/view-type-context';
+import { cn } from '@/lib/utils';
 
 const FileHeader = ({ file }: { file: FileProps }) => {
     const router = useRouter();
 
     const { setSaveTrigger_, saveTrigger_ } = useContext(SaveTriggerContext);
+    const { viewType_, setViewType_ } = useContext(ViewTypeContext);
 
     const deleteFile = useMutation(api.files.deleteFile);
     const handleDelete = () => {
@@ -63,6 +61,8 @@ const FileHeader = ({ file }: { file: FileProps }) => {
                     <Image src="/logo.png" alt="Logo" width={40} height={40} />
                 </Link>
                 <h2 className="text-sm font-semibold">{file?.name}</h2>
+
+                {/* File Options */}
                 <DropdownMenu>
                     <DropdownMenuTrigger>
                         <MoreHorizontal />
@@ -120,19 +120,44 @@ const FileHeader = ({ file }: { file: FileProps }) => {
                 <div className="flex flex-row items-center rounded  bg-neutral-800">
                     <div className="flex h-full  items-center overflow-hidden whitespace-nowrap rounded border border-neutral-700  bg-neutral-800">
                         <span className="inline-flex">
-                            <Button className="relative h-8 min-w-20 rounded-none border-r border-neutral-700 bg-neutral-800 px-3 py-1 text-sm font-medium text-white shadow-sm outline-transparent hover:bg-neutral-800/75 ">
+                            <Button
+                                className={cn(
+                                    'relative h-8 min-w-20 rounded-none border-r border-neutral-700  px-3 py-1 text-sm font-medium text-white shadow-sm outline-transparent hover:bg-neutral-800/75 ',
+                                    viewType_ === 'document' &&
+                                        'bg-neutral-800 ',
+                                )}
+                                onClick={() => {
+                                    setViewType_('document');
+                                }}
+                            >
                                 Document
                             </Button>
                         </span>
 
                         <span className="inline-flex">
-                            <Button className="relative hidden h-8 min-w-20 rounded-none border-r border-neutral-700 px-3 py-1 text-sm font-medium text-white shadow-sm outline-transparent hover:bg-neutral-800/75 sm:block">
+                            <Button
+                                className={cn(
+                                    'relative h-8 min-w-20 rounded-none border-r border-neutral-700  px-3 py-1 text-sm font-medium text-white shadow-sm outline-transparent hover:bg-neutral-800/75 ',
+                                    viewType_ === 'both' && 'bg-neutral-800 ',
+                                )}
+                                onClick={() => {
+                                    setViewType_('both');
+                                }}
+                            >
                                 Both
                             </Button>
                         </span>
 
                         <span className="inline-flex">
-                            <Button className="relative h-8 min-w-20 rounded-none  px-3 py-1 text-sm font-medium text-white shadow-sm outline-transparent hover:bg-neutral-800/75 ">
+                            <Button
+                                className={cn(
+                                    'relative h-8 min-w-20 rounded-none border-r border-neutral-700  px-3 py-1 text-sm font-medium text-white shadow-sm outline-transparent hover:bg-neutral-800/75 ',
+                                    viewType_ === 'canvas' && 'bg-neutral-800 ',
+                                )}
+                                onClick={() => {
+                                    setViewType_('canvas');
+                                }}
+                            >
                                 Canvas
                             </Button>
                         </span>
@@ -140,6 +165,7 @@ const FileHeader = ({ file }: { file: FileProps }) => {
                 </div>
             </div>
 
+            {/* CTA buttons */}
             <div className="flex items-center gap-4">
                 {/* Save button */}
                 <Button

@@ -24,6 +24,7 @@ const Canvas = ({ file }: { file: FileProps }) => {
             _id: file._id as any,
             whiteboard: JSON.stringify(whiteboardData),
         }).then((res) => {
+            toast.success('Document updated!');
             router.refresh();
         });
     };
