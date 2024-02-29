@@ -8,28 +8,16 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from '@/components/ui/dialog';
 
 import Image from 'next/image';
-import {
-    Archive,
-    ArrowRightLeft,
-    Edit,
-    MoreHorizontal,
-    Trash2,
-} from 'lucide-react';
+import { Archive, Edit, MoreHorizontal, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useConvex } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import { ActiveTeamContext } from '@/context/active-team-context';
 
 export type FileProps = {
     _id: string;
@@ -41,24 +29,31 @@ export type FileProps = {
     teamId: string;
     _creationTime: number;
 };
-import { Skeleton } from '@/components/ui/skeleton';
-import { CreateFileForm } from './craete-file-form';
 
-const FileList = () => {
+const ArchiveList = () => {
+    const { activeTeam_ } = useContext(ActiveTeamContext);
     const { user } = useKindeBrowserClient();
     const router = useRouter();
-    const { fileList_ } = useContext(FileListContext);
+    const convex = useConvex();
+    // const { fileList_ } = useContext(FileListContext);
 
-    const [fileList, setFileList] = useState<any>();
+    const [archivedFileList, setArchivedFileList] = useState<any>([]);
     const [loading, setLoading] = useState(true);
-    const [isRename, setIsRename] = useState(false);
-    console.log('Rename', isRename);
 
     useEffect(() => {
-        fileList_ && setFileList(fileList_);
-        console.log('fileList_', fileList_);
+        getArchivedFiles();
+        console.log('archived files: ', archivedFileList);
         setLoading(false);
-    }, [fileList_]);
+    }, [archivedFileList]);
+
+    const getArchivedFiles = async () => {
+        const result = await convex.query(api.files.getFiles, {
+            teamId: activeTeam_?._id ?? '',
+            archive: true,
+        });
+        console.log('result', result);
+        setArchivedFileList(result);
+    };
 
     return (
         <div className="overflow-x-auto rounded-lg border border-neutral-800">
@@ -82,8 +77,17 @@ const FileList = () => {
                 </thead>
 
                 <tbody className="divide-y divide-neutral-800">
-                    {!loading && fileList && fileList.length > 0 ? (
-                        fileList.map((file: FileProps) => (
+                    {!loading &&
+                        !archivedFileList &&
+                        archivedFileList?.length === 0 && (
+                            <tr>
+                                <td>No Archived files</td>
+                            </tr>
+                        )}
+                    {!loading &&
+                    archivedFileList &&
+                    archivedFileList.length !== null ? (
+                        archivedFileList.map((file: FileProps) => (
                             <tr
                                 key={file?._id}
                                 className="cursor-pointer transition hover:bg-neutral-800/75"
@@ -121,7 +125,7 @@ const FileList = () => {
                                             </span>
                                             <MoreHorizontal className="h-4 w-4" />
                                         </DropdownMenuTrigger>
-                                        <DropdownMenuContent className="relative z-50 border border-neutral-700 bg-[#171717] text-white">
+                                        <DropdownMenuContent className="border border-neutral-700 bg-[#171717] text-white">
                                             <DropdownMenuItem className="gap-2">
                                                 <Edit className=" h-4 w-4" />
                                                 Rename
@@ -165,4 +169,4 @@ const FileList = () => {
     );
 };
 
-export default FileList;
+export default ArchiveList;

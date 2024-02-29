@@ -28,6 +28,7 @@ import { useRouter } from 'next/navigation';
 import { useContext, useEffect, useState } from 'react';
 import CTALinks from './cta-links';
 import { FileListContext } from '@/context/file-list-context';
+import { ActiveTeamContext } from '@/context/active-team-context';
 
 interface TeamProps {
     name: string;
@@ -39,6 +40,7 @@ const Sidebar = () => {
     const convex = useConvex();
     const router = useRouter();
     const { setFileList_ } = useContext(FileListContext);
+    const { setActiveTeam_, activeTeam_ } = useContext(ActiveTeamContext);
 
     const [teamList, setTeamList] = useState<TeamProps[]>();
     const [isTeamLoading, setIsTeamLoading] = useState(false);
@@ -75,17 +77,19 @@ const Sidebar = () => {
         });
 
         setTeamList(result);
-        setActiveTeam(result[0]);
+        // setActiveTeam(result[0]);
+        setActiveTeam_(result[0]);
         setIsTeamLoading(false);
     };
 
     useEffect(() => {
-        (totalFiles || activeTeam) && getFiles();
-    }, [totalFiles, activeTeam]);
+        (totalFiles || activeTeam_) && getFiles();
+    }, [totalFiles, activeTeam_]);
 
     const getFiles = async () => {
         const result = await convex.query(api.files.getFiles, {
-            teamId: activeTeam?._id ?? '',
+            teamId: activeTeam_?._id ?? '',
+            archive: false,
         });
         setFileList_(result);
         setTotalFiles(result?.length);
@@ -110,7 +114,7 @@ const Sidebar = () => {
                                 {isTeamLoading ? (
                                     <Loader2 className="flex h-7 w-7 animate-spin items-center justify-center text-center" />
                                 ) : (
-                                    activeTeam?.name || (
+                                    activeTeam_?.name || (
                                         <Loader2 className="flex h-7 w-7 animate-spin items-center justify-center text-center" />
                                     )
                                 )}
@@ -136,9 +140,11 @@ const Sidebar = () => {
                             ) : (
                                 teamList?.map((team) => (
                                     <li
-                                        onClick={() => setActiveTeam(team)}
+                                        onClick={() => {
+                                            setActiveTeam_(team);
+                                        }}
                                         key={team._id}
-                                        className={`cursor-pointer rounded-sm  px-2 py-1 text-sm font-medium text-white transition hover:bg-neutral-800 ${activeTeam?._id === team._id && 'bg-blue-500 hover:bg-blue-500'}`}
+                                        className={`cursor-pointer rounded-sm  px-2 py-1 text-sm font-medium text-white transition hover:bg-neutral-800 ${activeTeam_?._id === team._id && 'bg-blue-500 hover:bg-blue-500'}`}
                                     >
                                         {team.name}
                                     </li>
@@ -200,11 +206,7 @@ const Sidebar = () => {
 
             {/* Other CTA links => Bottom section */}
 
-            <CTALinks
-                activeTeam={activeTeam}
-                totalFiles={totalFiles}
-                updateTotalFiles={getFiles}
-            />
+            <CTALinks totalFiles={totalFiles} updateTotalFiles={getFiles} />
         </aside>
     );
 };

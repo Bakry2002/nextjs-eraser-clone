@@ -62,6 +62,7 @@ const FileResizablePanel = ({ file }: { file: FileProps }) => {
             ) : (
                 <div className="mt-8 flex h-screen flex-col items-center space-y-3">
                     <div className="space-y-2">
+                        <Skeleton className="h-4 w-[900px]" />
                         <Skeleton className="h-4 w-[500px]" />
                         <Skeleton className="h-4 w-[250px]" />
                     </div>

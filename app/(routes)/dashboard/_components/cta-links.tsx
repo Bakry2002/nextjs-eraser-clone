@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { CTAMenu, MAX_FREE_FILE } from '@/constant';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import {
     Dialog,
     DialogContent,
@@ -13,19 +13,22 @@ import {
 } from '@/components/ui/dialog';
 import { CreateFileForm } from './craete-file-form';
 import Pricing from './pricing-modal';
+import { useRouter } from 'next/navigation';
+import { ActiveTeamContext } from '@/context/active-team-context';
 
 const CTALinks = ({
-    activeTeam,
     totalFiles,
     updateTotalFiles,
 }: {
-    activeTeam: any;
     totalFiles: number;
     updateTotalFiles: () => void;
 }) => {
+    const { activeTeam_ } = useContext(ActiveTeamContext);
     // extract the first item from the array
     const active = CTAMenu[0];
     const [activeLink, setActiveLink] = useState(CTAMenu[0]);
+
+    const router = useRouter();
 
     return (
         <>
@@ -33,7 +36,10 @@ const CTALinks = ({
                 <>
                     <div className="mt-8 flex-1">
                         <li
-                            onClick={() => setActiveLink(active)}
+                            onClick={() => {
+                                router.push(active.path);
+                                setActiveLink(active);
+                            }}
                             key={active.path}
                             className={cn(
                                 'flex cursor-pointer items-center gap-2 rounded-sm px-4 py-1.5 text-sm font-bold text-white transition',
@@ -48,7 +54,10 @@ const CTALinks = ({
                     </div>
                     {CTAMenu.filter((cta) => cta.id !== 1).map((cta) => (
                         <li
-                            onClick={() => setActiveLink(cta)}
+                            onClick={() => {
+                                router.push(cta.path);
+                                setActiveLink(cta);
+                            }}
                             key={cta.id}
                             className={cn(
                                 'flex cursor-pointer items-center gap-2 rounded-sm px-4 py-1.5 text-sm font-medium text-white transition hover:bg-neutral-800',
@@ -90,7 +99,6 @@ const CTALinks = ({
                         <DialogDescription>
                             <CreateFileForm
                                 updateTotalFiles={updateTotalFiles}
-                                activeTeam={activeTeam}
                                 className="w-full p-0 px-4 sm:w-full"
                                 fromDialog={true}
                             />

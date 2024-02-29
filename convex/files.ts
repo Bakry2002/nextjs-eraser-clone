@@ -23,12 +23,14 @@ export const createFile = mutation({
 export const getFiles = query({
     args: {
         teamId: v.string(),
+        archive: v.boolean(),
     },
 
     handler: async (ctx, args) => {
         const result = await ctx.db
             .query('files')
             .filter((q) => q.eq(q.field('teamId'), args.teamId))
+            .filter((q) => q.eq(q.field('archive'), args.archive))
             .order('desc')
             .collect();
         // get all files for a team
@@ -59,6 +61,21 @@ export const deleteFile = mutation({
 
 // ARCHIVE FILE
 export const archiveFile = mutation({
+    args: {
+        _id: v.id('files'),
+        archive: v.boolean(),
+    },
+    handler: async (ctx, args) => {
+        const result = await ctx.db.patch(args._id, {
+            archive: args.archive,
+        });
+
+        return result;
+    },
+});
+
+// UNARCHIVE FILE
+export const unarchiveFile = mutation({
     args: {
         _id: v.id('files'),
         archive: v.boolean(),

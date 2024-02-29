@@ -23,7 +23,8 @@ import { cn } from '@/lib/utils';
 import { DialogClose } from '@/components/ui/dialog';
 import { createFile, getFiles } from '@/convex/files';
 import { revalidatePath } from 'next/cache';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
+import { ActiveTeamContext } from '@/context/active-team-context';
 
 const formSchema = z.object({
     name: z.string().min(1, { message: 'Name is required' }),
@@ -32,14 +33,15 @@ const formSchema = z.object({
 export const CreateFileForm = ({
     className,
     fromDialog = false,
-    activeTeam,
+
     updateTotalFiles,
 }: {
     className?: string;
     fromDialog?: boolean;
-    activeTeam: any;
+
     updateTotalFiles: () => void;
 }) => {
+    const { activeTeam_ } = useContext(ActiveTeamContext);
     const convex = useConvex();
     const router = useRouter();
     const { user } = useKindeBrowserClient();
@@ -58,7 +60,7 @@ export const CreateFileForm = ({
         try {
             await createFile({
                 name: values.name,
-                teamId: activeTeam?._id,
+                teamId: activeTeam_?._id,
                 createdBy: user?.email ?? '',
                 archive: false,
                 document: '',

@@ -27,7 +27,7 @@ export const CTAMenu = [
     {
         id: 1,
         name: 'All Files',
-        path: '/dashboard/all',
+        path: '/dashboard',
         icon: LayoutGrid,
         isBeta: false,
     },

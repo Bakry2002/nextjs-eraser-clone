@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import {
     Archive,
+    ArchiveRestore,
     ArrowRightLeft,
     LayoutDashboard,
     LinkIcon,
@@ -12,7 +13,7 @@ import {
     Trash2,
 } from 'lucide-react';
 import Image from 'next/image';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -53,6 +54,24 @@ const FileHeader = ({ file }: { file: FileProps }) => {
         });
     };
 
+    const archiveFile = useMutation(api.files.archiveFile);
+    const handleArchive = () => {
+        archiveFile({
+            _id: file?._id as any,
+            archive: !file?.archive,
+        }).then((res) => {
+            if (file?.archive) {
+                toast.success('File restored!');
+                router.refresh();
+                router.push('/dashboard');
+            } else {
+                toast.success('File archived!');
+                router.refresh();
+                router.push('/dashboard');
+            }
+        });
+    };
+
     return (
         <div className="flex flex-col items-center justify-between gap-y-4 border-b border-neutral-800 p-3 sm:flex-row">
             {/* File name */}
@@ -68,9 +87,21 @@ const FileHeader = ({ file }: { file: FileProps }) => {
                         <MoreHorizontal />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="border border-neutral-700 bg-[#171717] text-white">
-                        <DropdownMenuItem className="gap-2">
-                            <Archive className=" h-4 w-4" />
-                            Archive
+                        <DropdownMenuItem
+                            className="gap-2"
+                            onClick={handleArchive}
+                        >
+                            {file?.archive ? (
+                                <span className="flex gap-2">
+                                    <ArchiveRestore className=" h-4 w-4" />
+                                    Restore file
+                                </span>
+                            ) : (
+                                <span className="flex gap-2">
+                                    <Archive className=" h-4 w-4" />
+                                    Archive
+                                </span>
+                            )}
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             className="gap-2"
