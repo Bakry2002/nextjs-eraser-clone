@@ -1,6 +1,6 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { CTAMenu } from '@/constant';
+import { CTAMenu, MAX_FREE_FILE } from '@/constant';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import {
@@ -12,6 +12,7 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 import { CreateFileForm } from './craete-file-form';
+import Pricing from './pricing-modal';
 
 const CTALinks = ({
     activeTeam,
@@ -79,19 +80,25 @@ const CTALinks = ({
                         New File
                     </Button>
                 </DialogTrigger>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle className="">Create New File</DialogTitle>
-                    </DialogHeader>
-                    <DialogDescription>
-                        <CreateFileForm
-                            updateTotalFiles={updateTotalFiles}
-                            activeTeam={activeTeam}
-                            className="w-full p-0 px-4 sm:w-full"
-                            fromDialog={true}
-                        />
-                    </DialogDescription>
-                </DialogContent>
+                {totalFiles < MAX_FREE_FILE ? (
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle className="">
+                                Create New File
+                            </DialogTitle>
+                        </DialogHeader>
+                        <DialogDescription>
+                            <CreateFileForm
+                                updateTotalFiles={updateTotalFiles}
+                                activeTeam={activeTeam}
+                                className="w-full p-0 px-4 sm:w-full"
+                                fromDialog={true}
+                            />
+                        </DialogDescription>
+                    </DialogContent>
+                ) : (
+                    <Pricing />
+                )}
             </Dialog>
 
             {/* Progress bar => File creation limit */}
@@ -104,8 +111,8 @@ const CTALinks = ({
             </div>
             <div className="mb-2">
                 <h2 className="mt-4 text-xs">
-                    <strong>{totalFiles}</strong> out of <strong>5</strong>{' '}
-                    files used.
+                    <strong>{totalFiles}</strong> out of{' '}
+                    <strong>{MAX_FREE_FILE}</strong> files used.
                 </h2>
                 <p className="text-xs">
                     <span className="underline">Upgrade</span> your plan for
